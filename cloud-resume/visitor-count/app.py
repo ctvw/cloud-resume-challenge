@@ -1,0 +1,32 @@
+import boto3
+import json
+from boto3.dynamodb.conditions import Key
+
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('VisitorCountTable')
+    
+def lambda_handler(event, context):
+    response = table.update_item(     
+        Key={        
+            'ID': 'visitors'
+        },   
+        UpdateExpression='ADD ' + 'visitors' + ' :incr',
+        ExpressionAttributeValues={        
+            ':incr': 1    
+        },    
+        ReturnValues="UPDATED_NEW"
+    )
+    
+    responseBody = json.dumps({"count": int(response["Attributes"]["visitors"])})
+
+
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': '*',
+            'Access-Control-Allow-Credentials': '*',
+            'Content-Type': 'application/json'
+        },
+        "body": responseBody
+    }

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CT Resume</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="CT's Resume page">
+    <meta name="author" content="Christopher Van Weelden">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/kube.min.css" />
+    <link rel="stylesheet" href="css/font-awesome.min.css" />
+    <link rel="stylesheet" href="css/custom.min.css" />
+    <link rel="shortcut icon" href="img/favicon.png" />
+	<link href='https://fonts.googleapis.com/css?family=Playfair+Display+SC:700' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+	<style>
+		.intro h1:before {
+			content: 'CT';
+		}
+	</style>
+</head>
+<body onload="updateCounter()">
+	<!-- Navigation -->
+	<div class="main-nav">
+		<div class="container">
+			<header class="group top-nav">
+				<div class="navigation-toggle" data-tools="navigation-toggle" data-target="#navbar-1">
+				    <span class="logo">CT</span>
+				</div>
+			    <nav id="navbar-1" class="navbar item-nav">
+				    <ul>
+				        <li class="active"><a href="#about">About</a></li>
+				        <li><a href="#experiences">Experiences</a></li>
+				        <li><a href="#achievements">Achievements</a></li>
+				        <li><a href="#skills">Skills</a></li>
+				    </ul>
+				</nav>
+			</header>
+		</div>
+	</div>
+
+	<!-- Introduction -->
+	<div class="intro section" id="about">
+		<div class="container">
+			<p>Hi, I’m Christopher</p>
+			<div class="units-row units-split wrap">
+				<div class="unit-20">
+					<img src="img/ava.jpg" alt="Avatar">
+				</div>
+				<div class="unit-80">
+					<h1>I live in<br><span id="typed"></span></h1>
+				</div>
+				<p>
+				Christopher is a Software Engineer located on the outskirts of NKY, just an earshot away from Cincinnati, OH. 
+				When AFK, he enjoys weightlifting, motorcycles, reading, and spending time with his awesome wife and two dachshunds (Porter and Nora).
+				</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Work Experience -->
+	<div class="work section second" id="experiences">
+		<div class="container">
+			<h1>Work<br>Experiences</h1>
+			<ul class="work-list">
+				<li>July 2022 - PRESENT</li>
+				<li><a href="#" style="pointer-events: none; cursor: default;">AssureCare</a></li>
+				<li>Senior Configuration Engineer - Lead</li>
+				<li class="list flat">Custom tailor EHR/EMR software to fit clients needs, by writing custom rule engines and altering UI/UX experience. Lead a group of other engineers, to ensure sprint work is completed in a timely manner.</li>
+				<li style="margin-left: 40px;">
+					<a style="pointer-events: none; cursor: default;" href="#">
+						Merits<a></li>
+					<li style="margin-left: 45px;">SCRUM/Ceremony Master</li>
+			</ul>
+			<ul class="work-list">
+				<li>May 2016 - July 2022</li>
+				<li><a href="#" style="pointer-events: none; cursor: default;">Paycor</a></li>
+				<li>Software Engineer</li>
+				<li>Software Support Analyst</li>
+				<li class="list flat">Collaborate alongside a core group of developers in an AGILE/Kanban team setting, implementing designs and features on a HCM SaaS offering. Troubleshoot technical issues within web applications to identify and resolve bugs.</li>
+				<li style="margin-left: 40px;">
+					<a style="pointer-events: none; cursor: default;" href="#">
+						Merits<a></li>
+					<li style="margin-left: 45px;">Developed a new feature that is used >100k times per month</li>
+					<li style="margin-left: 45px;">Over 9000 work orders closed</li>
+					<li style="margin-left: 45px;">Over 100 production bugs resolved within various parts of the application</li>
+			</ul>
+			<ul class="work-list">
+				<li>September 2014 - May 2016</li>
+				<li><a href="#" style="pointer-events: none; cursor: default;">Cengage Learning</a></li>
+				<li>LMS Technical Support</li>
+				<li class="description">Troubleshoot technical and configuration issues within LMS and app suite. Create support documentation, maintain knowledgebase articles, and lead learning efforts for peers.</li>
+			</ul>
+			<ul class="work-list">
+				<li>July 2013 - September 2014</li>
+				<li><a href="#" style="pointer-events: none; cursor: default;">Intec Solutions</a></li>
+				<li>Systems Engineer</li>
+				<li class="description">Sole engineer monitoring support queue for 50+ clients. Monitored server and desktop health, maintained AD and Exchange configurations, and deployed updates to the environments. Configured and installation of thin-clients and networks</li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- Award & Achievements -->
+	<div class="award section second" id="achievements">
+		<div class="container">
+			<h1>Award &amp;<br>Achievements</h1>
+			<ul class="award-list list-flat">
+				<li>June 2022</li>
+				<li>Completed the Cloud Resume Challenge</li>
+			</ul>
+			<ul class="award-list list-flat">
+				<li>December 2021</li>
+				<li>Attained AAS, CIT - Programming at Gateway Community & Technical College (KCTCS)</li>
+			</ul>
+			<ul class="award-list list-flat">
+				<li>February 2021</li>
+				<li>Promoted to Software  Engineer from Software Support Analyst</li>
+			</ul>
+			</ul>
+		</div>
+	</div>
+
+	<!-- Technical Skills -->
+	<div class="skills section second" id="skills">
+		<div class="container">
+			<h1>Technical<br>Skills</h1>
+			<ul class="skill-list list-flat">
+				<li>Web Technology</li>
+				<li> C#, JavaScript, HTML/CSS</li>
+			</ul>
+			<ul class="skill-list list-flat">
+				<li>Database</li>
+				<li>Microsoft SQL</li>
+			</ul>
+		</div>
+	</div>
+
+	<!-- Footer -->
+	<footer>
+		<div class="footerLogos" style="display: flex; align-items: center; justify-content: center;">
+			<div><a href="mailto:ctvw@pm.me"><i class="fa fa-send  fa-3x"></i></a></div>
+			<div><a href="https://github.com/ctvw"><i class="fa fa-github fa-3x"></i></a></div>
+			<div><a href="https://www.linkedin.com/in/ctvw/"><i class="fa fa-linkedin fa-3x"></i></a></div>
+		</div>
+			<div class="visitCounter" id="about" style="display: flex; align-items: center; justify-content: center;">Visits: <span id="visits"></span></div>
+	</footer>
+
+	<!-- Javascript -->
+	<script src="js/jquery.min.js"></script>
+	<script src="js/typed.min.js"></script>
+    <script src="js/kube.min.js"></script>
+    <script src="js/site.js"></script>
+    <script>
+		function newTyped(){}$(function(){$("#typed").typed({
+		strings: ["Covington, KY","Cincinnati","WHO DEY!", "A galaxy far, far away..."],
+
+		typeSpeed:90,backDelay:700,contentType:"html",loop:!0,resetCallback:function(){newTyped()}}),$(".reset").click(function(){$("#typed").typed("reset")})});
+    </script>
+	<script>
+		function updateCounter(){
+    fetch('https://api.ctvw.xyz/GetCount',{
+        method: 'GET'
+    })
+  .then(response => {
+    if (
+        response.ok
+    ) {
+      return response.json()
+    } else {
+      throw new Error('something went wrong');
+    }
+  })
+  .then(
+	data => document.getElementById("visits").innerText = data.count)}
+  
+	</script>
+</body>
+</html>

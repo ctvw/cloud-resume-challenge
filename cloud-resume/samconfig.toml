@@ -1,0 +1,13 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "CloudResume"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-lj3u9nwjmise"
+s3_prefix = "CloudResume"
+region = "us-east-1"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+disable_rollback = true
+image_repositories = []
+parameter_overrides = "Domain=\"api.ctvw.xyz\" HostedZoneId=\"Z020489610B861HNC05W2\""

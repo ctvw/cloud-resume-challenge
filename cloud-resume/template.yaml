@@ -1,0 +1,189 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: CloudResume
+
+Globals:
+  Function:
+    Timeout: 3
+
+Parameters:
+  Domain:
+    Description: "Domain for API Gateway API's"
+    Type: String
+    Default: api.ctvw.xyz
+  HostedZoneId:
+    Description: "Hosted Zone Id in which we want to add A record"
+    Type: String
+    Default: Z020489610B861HNC05W2
+  Stage:
+    Type: String
+    Default: Prod
+
+Resources:
+  MyWebsite:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+      BucketName: ctvw.xyz
+      
+  BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        PolicyDocument:
+          Id: WebPolicy
+          Version: 2012-10-17
+          Statement:
+            - Sid: PublicReadForGetBucketObjects
+              Effect: Allow
+              Principal: "*"
+              Action: "s3:GetObject"
+              Resource: !Join
+                - ""
+                - - "arn:aws:s3:::"
+                  - !Ref MyWebsite
+                  - /*
+        Bucket: !Ref MyWebsite
+  
+  CloudFrontOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: "Serverless website in S3"
+
+  MyRoute53Record:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneId: Z020489610B861HNC05W2
+      RecordSets:
+        - Name: ctvw.xyz
+          Type: A
+          AliasTarget:
+            HostedZoneId: Z2FDTNDATAQYW2
+            DNSName: !GetAtt MyDistribution.DomainName
+
+  SiteACMCert:
+    Type: "AWS::CertificateManager::Certificate"
+    Properties:
+      DomainName: ctvw.xyz
+      DomainValidationOptions:
+        - DomainName: ctvw.xyz
+          HostedZoneId: Z020489610B861HNC05W2
+      ValidationMethod: DNS
+
+  ApiACMCert:
+    Type: "AWS::CertificateManager::Certificate"
+    Properties:
+      DomainName: api.ctvw.xyz
+      DomainValidationOptions:
+        - DomainName: api.ctvw.xyz
+          HostedZoneId: Z020489610B861HNC05W2
+      ValidationMethod: DNS
+
+  MyDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        ViewerCertificate:
+          AcmCertificateArn: !Ref SiteACMCert
+          SslSupportMethod: sni-only
+        Aliases:
+          - ctvw.xyz
+        DefaultCacheBehavior:
+          Compress: 'true'
+          ViewerProtocolPolicy: redirect-to-https
+          TargetOriginId: s3-website
+          DefaultTTL: 86400
+          MinTTL: 1
+          MaxTTL: 86400
+          ForwardedValues:
+            QueryString: false
+        PriceClass: PriceClass_100
+        Origins:
+          - DomainName: !GetAtt MyWebsite.DomainName
+            Id: s3-website
+            S3OriginConfig:
+              OriginAccessIdentity:
+                Fn::Sub: 'origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}'
+        Enabled: "true"
+        DefaultRootObject: index.html
+        HttpVersion: http2
+    
+  VisitorCountFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: GetCount
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: VisitorCountTable
+      CodeUri: visitor-count/
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+        - x86_64
+      Events:
+        ApiEvent:
+          Type: Api 
+          Properties:
+            Path: /GetCount
+            Method: get
+
+  ApiDomain:
+    Type: AWS::ApiGateway::DomainName
+    Properties: 
+      DomainName: !Ref Domain
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      RegionalCertificateArn: !Ref ApiACMCert
+
+  ApiMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties: 
+      DomainName: !Ref ApiDomain
+      RestApiId: !Ref ServerlessRestApi
+      Stage: !Ref Stage
+
+  ApiDeployment:
+    Type: AWS::ApiGateway::Deployment
+    Properties: 
+      Description: Deploy API to Prod
+      RestApiId: !Ref ServerlessRestApi
+      StageName: !Ref Stage
+
+  Route53RecordSetGroup:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: !Ref Domain
+      Type: A
+      HostedZoneId: !Ref HostedZoneId
+      AliasTarget:
+        DNSName: !GetAtt ApiDomain.RegionalDomainName
+        HostedZoneId: !GetAtt ApiDomain.RegionalHostedZoneId
+  
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: VisitorCountTable
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: "ID"
+          AttributeType: "S"
+      KeySchema:
+        - AttributeName: "ID"
+          KeyType: "HASH"
+
+Outputs:
+  VisitorCountApiEndpoint:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}/GetCount/"
+  VisitorCountFunction:
+    Description: "GetCountFunction Lambda Function ARN"
+    Value: !GetAtt VisitorCountFunction.Arn
+  GetCountFunctionIamRole:
+    Description: "Implicit IAM Role created for GetCountFunction"
+    Value: !GetAtt VisitorCountFunction.Arn
+  MyDistribution:
+    Description: "CloudFront distribution domain name"
+    Value: !GetAtt MyDistribution.DomainName
