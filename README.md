@@ -1,12 +1,5 @@
-This is my README.test
--------
-title: Cloud Resume Challenge
-author: CT
-date: 2022-06-20 20:55:00 +0800
-categories: [Blogging, Education, Cloud]
-tags: [cloud, education]
-pin: true
----
+# Cloud Resume Challenge
+06/21/2022
 
 ## Introduction
 
@@ -24,7 +17,7 @@ This course is very thorough, and I cannot recommend it enough. I went through t
 
 ### Static Website, CloudFront, and ACM:
 
-![](/assets/img/CVFrontEnd.png)
+![front-end](https://i.imgur.com/gJc4bqF.gif)
 
 I started with just a basic HTML web-page, reminisce of the Angelfire/Geocities days, but just adding html format tags to my existing resume document. I just wanted to ensure that I had a working model, and that it would display with S3. 
 
@@ -38,7 +31,7 @@ I found ACM super neat – it took all the trouble of generating certificates, a
 
 ### DYNAMODB AND LAMBDA:
 
-![](/assets/img/Lambda.png)
+![lambda](https://user-images.githubusercontent.com/7934145/174809824-b4a45a64-f8a7-406e-8c88-f20cb2fc9d74.png)
 
 Now, we needed to add a Visitor Count to our website, in which that data is stored in a DynamoDB. I was most excited about this part of the challenge, as writing serverless functions and NoSQL databases were something I’ve always wanted to dip my toes into. I have quite a bit of experience with tSQL, but NoSQL was a whole different beast. I started by going to the DynamoDB console, and just creating a table with the visitor partition key. I then gave this an item of VisitorCount, with a value of visitor_counter (Number). With that out of the way, we’re onto Lambda.
 
@@ -80,10 +73,9 @@ Pro-tip from a casual: If you haven’t heard of [aws-vault](https://github.com/
 
 GitHub Actions was something I will admit I wasn’t looking forward to dealing with, despite having Git experience. For some reason, I thought it was going to be much more involved, but to my surprise it’s just YAML! Not only that, but there are also templates out there for pretty much everything out there – no need to reinvent the wheel. I set up a template to move my code to S3 when there was a commit, and then invalidate the CloudFront cache so that my changes are applied instantly. 
 
-![](/assets/img/deployCode.jpeg)
+![Code Deploy!](https://user-images.githubusercontent.com/7934145/174810233-18ed8295-94f7-4ea7-b18b-f31133463265.png)
+
 
 ### THOUGHTS:
 I thoroughly enjoyed the week I spent with the Cloud Resume Challenge. It helped level up my skills in the cloud space – I feel it helped me achieve a grasp of the fundamentals. From here, I would like to continue my studies (looking at you, Cantrill), and get my AWS SAA. I also would like to attempt this challenge within Azure, as I currently am working in a .NET stack. 
 I think the greatest part of the Cloud Resume Challenge is that it helped me overcome the fear of the cloud – it’s not as scary as you think, and it’s without a doubt the most fun I’ve had as of recent when it comes to studying.  I also have a number of projects I would like to tackle with AWS – a server-less QR code generator being my next.
-
-Feel free to checkout my GitHub Repo for this here:
