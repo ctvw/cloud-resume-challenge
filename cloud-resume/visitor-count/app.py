@@ -1,34 +1,32 @@
-import json
 import boto3
-from boto3.dynamodb.conditions import Key # this is used for the DynamoDB Table Resource
+import json
+from boto3.dynamodb.conditions import Key
 
-TABLE_NAME = "cloud-resume-visitor-count"  # Used to declare table 
-# Creating the DynamoDB Client
-dynamodb_client = boto3.client('dynamodb', region_name="us-east-1")
-
-# Creating the DynamoDB Table Resource
-dynamodb_table = boto3.resource('dynamodb', region_name="us-east-1")
-table = dynamodb_table.Table(TABLE_NAME)
-
-# Use the DynamoDB Table update item method to increment item
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('VisitorCountTable')
+    
 def lambda_handler(event, context):
-    response = table.get_item(
-        TableName =TABLE_NAME,
-        Key={
-            "visitor":'VisitorCount',
-        }
-        )
-    item = response['Item']
-
-    table.update_item(
-        Key={
-            "visitor":'VisitorCount',
-        },
-        UpdateExpression='SET visitor_counter = :val1',
-        ExpressionAttributeValues={
-            ':val1': item['visitor_counter'] + 1
-        }
+    response = table.update_item(     
+        Key={        
+            'ID': 'visitors'
+        },   
+        UpdateExpression='ADD ' + 'visitors' + ' :incr',
+        ExpressionAttributeValues={        
+            ':incr': 1    
+        },    
+        ReturnValues="UPDATED_NEW"
     )
-    return{
-      "body":{"Visit_Count": str(item['visitor_counter'] + 1)}
+    
+    responseBody = json.dumps({"count": int(response["Attributes"]["visitors"])})
+
+
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': '*',
+            'Access-Control-Allow-Credentials': '*',
+            'Content-Type': 'application/json'
+        },
+        "body": responseBody
     }

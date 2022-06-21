@@ -1,13 +1,25 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: >
-  cloud-resume
+Description: CloudResume
+
 Globals:
   Function:
     Timeout: 3
 
-Resources:
+Parameters:
+  Domain:
+    Description: "Domain for API Gateway API's"
+    Type: String
+    Default: api.ctvw.xyz
+  HostedZoneId:
+    Description: "Hosted Zone Id in which we want to add A record"
+    Type: String
+    Default: Z020489610B861HNC05W2
+  Stage:
+    Type: String
+    Default: Prod
 
+Resources:
   MyWebsite:
     Type: AWS::S3::Bucket
     Properties:
@@ -40,7 +52,6 @@ Resources:
       CloudFrontOriginAccessIdentityConfig:
         Comment: "Serverless website in S3"
 
-  
   MyRoute53Record:
     Type: AWS::Route53::RecordSetGroup
     Properties:
@@ -52,10 +63,33 @@ Resources:
             HostedZoneId: Z2FDTNDATAQYW2
             DNSName: !GetAtt MyDistribution.DomainName
 
+  SiteACMCert:
+    Type: "AWS::CertificateManager::Certificate"
+    Properties:
+      DomainName: ctvw.xyz
+      DomainValidationOptions:
+        - DomainName: ctvw.xyz
+          HostedZoneId: Z020489610B861HNC05W2
+      ValidationMethod: DNS
+
+  ApiACMCert:
+    Type: "AWS::CertificateManager::Certificate"
+    Properties:
+      DomainName: api.ctvw.xyz
+      DomainValidationOptions:
+        - DomainName: api.ctvw.xyz
+          HostedZoneId: Z020489610B861HNC05W2
+      ValidationMethod: DNS
+
   MyDistribution:
     Type: AWS::CloudFront::Distribution
     Properties:
       DistributionConfig:
+        ViewerCertificate:
+          AcmCertificateArn: !Ref SiteACMCert
+          SslSupportMethod: sni-only
+        Aliases:
+          - ctvw.xyz
         DefaultCacheBehavior:
           Compress: 'true'
           ViewerProtocolPolicy: redirect-to-https
@@ -79,25 +113,59 @@ Resources:
   VisitorCountFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: GetCount
       Policies:
         - DynamoDBCrudPolicy:
-            TableName: cloud-resume-visitor-count
+            TableName: VisitorCountTable
       CodeUri: visitor-count/
       Handler: app.lambda_handler
       Runtime: python3.9
       Architectures:
         - x86_64
       Events:
-        HelloWorld:
+        ApiEvent:
           Type: Api 
           Properties:
-            Path: /get
+            Path: /GetCount
             Method: get
-    
+
+  ApiDomain:
+    Type: AWS::ApiGateway::DomainName
+    Properties: 
+      DomainName: !Ref Domain
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      RegionalCertificateArn: !Ref ApiACMCert
+
+  ApiMapping:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties: 
+      DomainName: !Ref ApiDomain
+      RestApiId: !Ref ServerlessRestApi
+      Stage: !Ref Stage
+
+  ApiDeployment:
+    Type: AWS::ApiGateway::Deployment
+    Properties: 
+      Description: Deploy API to Prod
+      RestApiId: !Ref ServerlessRestApi
+      StageName: !Ref Stage
+
+  Route53RecordSetGroup:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      Name: !Ref Domain
+      Type: A
+      HostedZoneId: !Ref HostedZoneId
+      AliasTarget:
+        DNSName: !GetAtt ApiDomain.RegionalDomainName
+        HostedZoneId: !GetAtt ApiDomain.RegionalHostedZoneId
+  
   DynamoDBTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: cloud-resume-visitor-count
+      TableName: VisitorCountTable
       BillingMode: PAY_PER_REQUEST
       AttributeDefinitions:
         - AttributeName: "ID"
@@ -107,6 +175,9 @@ Resources:
           KeyType: "HASH"
 
 Outputs:
+  VisitorCountApiEndpoint:
+    Description: "API Gateway endpoint URL for Prod stage for Hello World function"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/${Stage}/GetCount/"
   VisitorCountFunction:
     Description: "GetCountFunction Lambda Function ARN"
     Value: !GetAtt VisitorCountFunction.Arn
@@ -116,4 +187,3 @@ Outputs:
   MyDistribution:
     Description: "CloudFront distribution domain name"
     Value: !GetAtt MyDistribution.DomainName
-    

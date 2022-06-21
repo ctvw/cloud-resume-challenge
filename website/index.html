@@ -33,6 +33,7 @@
 				        <li><a href="#experiences">Experiences</a></li>
 				        <li><a href="#achievements">Achievements</a></li>
 				        <li><a href="#skills">Skills</a></li>
+						<li><a href="/website/blog/_site/index.html">Blog</a><li></li>
 				    </ul>
 				</nav>
 			</header>
@@ -149,12 +150,11 @@
     </script>
 	<script>
 		function updateCounter(){
-    fetch('https://api.cthom.xyz/incrementVisitorCount',{
+    fetch('https://api.ctvw.xyz/GetCount',{
         method: 'GET'
     })
   .then(response => {
     if (
-        // check if response's status is 200
         response.ok
     ) {
       return response.json()
@@ -163,7 +163,7 @@
     }
   })
   .then(
-	data => document.getElementById("visits").innerText = data.body.Visit_Count)}
+	data => document.getElementById("visits").innerText = data.count)}
   
 	</script>
 </body>
