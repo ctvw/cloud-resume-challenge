@@ -1,0 +1,66 @@
+
+
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>https://www.ctvw.xyz/</id>
+  <title>CT</title>
+  <subtitle>A minimal, responsive, and powerful Jekyll theme for presenting professional writing.</subtitle>
+  <updated>2022-06-20T23:37:32-04:00</updated>
+  <author>
+    <name>Christopher</name>
+    <uri>https://www.ctvw.xyz/</uri>
+  </author>
+  <link rel="self" type="application/atom+xml" href="https://www.ctvw.xyz/feed.xml"/>
+  <link rel="alternate" type="text/html" hreflang="en"
+    href="https://www.ctvw.xyz/"/>
+  <generator uri="https://jekyllrb.com/" version="4.2.2">Jekyll</generator>
+  <rights> © 2022 Christopher </rights>
+  <icon>/assets/img/favicons/favicon.ico</icon>
+  <logo>/assets/img/favicons/favicon-96x96.png</logo>
+
+
+  
+  <entry>
+    <title>Cloud Resume Challenge</title>
+    <link href="https://www.ctvw.xyz/posts/cloud-resume-challenge/" rel="alternate" type="text/html" title="Cloud Resume Challenge" />
+    <published>2022-06-20T08:55:00-04:00</published>
+  
+    <updated>2022-06-20T08:55:00-04:00</updated>
+  
+    <id>https://www.ctvw.xyz/posts/cloud-resume-challenge/</id>
+    <content src="https://www.ctvw.xyz/posts/cloud-resume-challenge/" />
+    <author>
+      <name>CT</name>
+    </author>
+
+  
+    
+    <category term="Blogging" />
+    
+    <category term="Education" />
+    
+    <category term="Cloud" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      Introduction
+
+Coming from a Software Dev background, I have always been interested in the mysterious Cloud, and wanted to learn more of the inner workings, but had no idea where to start. It was not until a good friend of mine, Dakota Riley, gifted me Forrest Brazeal’s Cloud Resume Challenge book, where I finally took the dive, put my head down, and immersed myself.
+
+Preparation
+I read Forrest ...
+    </summary>
+  
+
+  </entry>
+
+</feed>
+
+
