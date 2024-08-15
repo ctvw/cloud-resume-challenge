@@ -9,6 +9,24 @@ permissions:
       id-token: write   # This is required for requesting the JWT
       contents: read    # This is required for actions/checkout
 jobs:
+  CloudFormation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git clone the repository
+        uses: actions/checkout@v3
+      - name: Sam Setup
+        uses: aws-actions/setup-sam@v2
+        with: 
+          use installer: true
+          aws-region: ${{ env.AWS_REGION }}
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::530285208563:role/github-oidc-role
+          aws-region: ${{ env.AWS_REGION }}
+          role-session-name: cloudresumechallenge
+      - run: sam build --use-container
+      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset
   S3PackageUpload:
     runs-on: ubuntu-latest
     steps:

@@ -115,7 +115,7 @@ Resources:
     Properties:
       FunctionName: GetCount
       Policies:
-        - DynamoDBCrudPolicy:
+        - DynamoDBWritePolicy:
             TableName: VisitorCountTable
       CodeUri: visitor-count/
       Handler: app.lambda_handler
