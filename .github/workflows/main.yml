@@ -29,7 +29,7 @@ jobs:
         run: |
           cd cloud-resume 
           sam build --use-container 
-          am deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name CloudResume 
+          sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name CloudResume 
 
   S3PackageUpload:
     runs-on: ubuntu-latest
