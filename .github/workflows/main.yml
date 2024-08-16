@@ -25,9 +25,12 @@ jobs:
           role-to-assume: arn:aws:iam::530285208563:role/github-oidc-role
           aws-region: ${{ env.AWS_REGION }}
           role-session-name: cloudresumechallenge
-      - run: cd cloud-resume
-      - run: sam build --use-container
-      - run: sam deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name CloudResume
+      - name: SAM Build
+        run: |
+          cd cloud-resume 
+          sam build --use-container 
+          am deploy --no-confirm-changeset --no-fail-on-empty-changeset --stack-name CloudResume 
+
   S3PackageUpload:
     runs-on: ubuntu-latest
     steps:
